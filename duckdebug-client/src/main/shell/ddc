@@ -1,0 +1,11 @@
+#!/bin/sh
+
+SCRIPT_LOCATION=$0
+DDC_HOME=`dirname "$SCRIPT_LOCATION"`
+CLASSPATH="$DDC_HOME/../lib/*"
+
+stty -icanon min 1 -echo
+
+java -cp "$CLASSPATH" com.tuneit.duckdebug.Main $@
+
+stty icanon echo
