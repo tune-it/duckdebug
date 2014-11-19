@@ -80,7 +80,6 @@ public class Server {
                 this.socket.setSoTimeout(60 * 60 * 1000);
                 out = socket.getOutputStream();
                 in = socket.getInputStream();
-
                 out.write(duck.getBytes());
                 out.flush();
             } catch(IOException ex) {
@@ -89,7 +88,7 @@ public class Server {
             }
 
             Binding binding = new Binding();
-            Groovysh shell = new Groovysh(new IO(in, out, out));
+            Groovysh shell = new Groovysh(binding, new IO(in, out, out));
             shell.run("");
 
             tryClose();
