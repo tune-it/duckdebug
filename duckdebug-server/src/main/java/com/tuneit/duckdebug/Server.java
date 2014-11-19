@@ -3,6 +3,7 @@ package com.tuneit.duckdebug;
 import groovy.lang.Binding;
 import org.codehaus.groovy.tools.shell.Groovysh;
 import org.codehaus.groovy.tools.shell.IO;
+import org.fusesource.jansi.Ansi;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -80,7 +81,8 @@ public class Server {
                 this.socket.setSoTimeout(60 * 60 * 1000);
                 out = socket.getOutputStream();
                 in = socket.getInputStream();
-                out.write(duck.getBytes());
+                out.write(Ansi.ansi().render("@|YELLOW " + duck + "|@")
+                                .toString().getBytes());
                 out.flush();
             } catch(IOException ex) {
                 tryClose();
@@ -89,6 +91,9 @@ public class Server {
 
             Binding binding = new Binding();
             Groovysh shell = new Groovysh(binding, new IO(in, out, out));
+            binding.setProperty("out", out);
+            binding.setProperty("shell", shell);
+            binding.setProperty("duck", duck);
             shell.run("");
 
             tryClose();

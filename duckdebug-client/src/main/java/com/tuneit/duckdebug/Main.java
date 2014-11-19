@@ -33,7 +33,6 @@ public class Main {
             System.err.println( exp.getMessage() );
             failed = true;
         } catch (NumberFormatException ex) {
-            System.err.println("Incorrect port");
             failed = true;
         } finally {
             if(failed) {
@@ -53,7 +52,7 @@ public class Main {
             return;
         }
 
-        Thread recive = new Thread(new Runnable() {
+        final Thread recive = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -65,9 +64,7 @@ public class Main {
                         System.out.write(c);
                         System.out.flush();
                     }
-                } catch(IOException ex) {
-                    ex.printStackTrace();
-                }
+                } catch(IOException ex) { }
             }
         });
 
@@ -79,23 +76,23 @@ public class Main {
                     while (true) {
                         c = System.in.read();
                         if (c == -1) break;
-
                         os.write(c);
                         os.flush();
                     }
-                } catch(IOException ex) {
-                    ex.printStackTrace();
-                }
+                } catch(IOException ex) { }
             }
         });
+
 
         recive.start();
         send.start();
 
         try {
             recive.join();
+            System.in.close();
             send.join();
-        } catch (InterruptedException ex) {
+            socket.close();
+        } catch (InterruptedException | IOException ex) {
             ex.printStackTrace();
         }
     }
