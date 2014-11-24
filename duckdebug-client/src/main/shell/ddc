@@ -1,18 +1,8 @@
-#!/bin/bash
+#!/bin/bash +H
 
-SCRIPT_LOCATION="$(type -p ${0})"
+SCRIPT=`readlink -- "$0" || echo "$0"`
+CLASSPATH="`dirname "$SCRIPT"`/../lib/*"
 
-if [[ -L "${SCRIPT_LOCATION}" ]]
-then
-    DDC_HOME="$(dirname $(readlink ${SCRIPT_LOCATION}))/"
-else
-    DDC_HOME="$(dirname ${SCRIPT_LOCATION})"
-fi
-
-CLASSPATH="${DDC_HOME}/../lib/*"
-
-tty >/dev/null 2>&1 && stty -icanon min 1 -echo
-
-java -cp "$CLASSPATH" com.tuneit.duckdebug.Main $@
-
-tty >/dev/null 2>&1 && stty icanon echo
+stty -icanon min 1 -echo
+java -cp "$CLASSPATH" com.tuneit.duckdebug.Main "$@"
+stty icanon echo
