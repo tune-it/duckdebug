@@ -1,0 +1,8 @@
+#!/bin/bash +H
+
+SCRIPT=`readlink -- "$0" || echo "$0"`
+CLASSPATH="`dirname "$SCRIPT"`/../lib/*"
+
+stty -icanon min 1 -echo
+java -cp "$CLASSPATH" com.tuneit.duckdebug.Main "$@"
+stty icanon echo
